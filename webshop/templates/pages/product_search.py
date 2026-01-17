@@ -34,33 +34,49 @@ def get_product_list(search=None, start=0, limit=12):
 
 
 def get_product_data(search=None, start=0, limit=12):
+	"""Get product data using QueryBuilder for better maintainability."""
 	# limit = 12 because we show 12 items in the grid view
-	# base query
-	query = """
-		SELECT
-			web_item_name, item_name, item_code, brand, route,
-			website_image, thumbnail, item_group,
-			description, web_long_description as website_description,
-			website_warehouse, ranking
-		FROM `tabWebsite Item`
-		WHERE published = 1
-		"""
+	WebsiteItem = frappe.qb.DocType("Website Item")
+
+	query = (
+		frappe.qb.from_(WebsiteItem)
+		.select(
+			WebsiteItem.web_item_name,
+			WebsiteItem.item_name,
+			WebsiteItem.item_code,
+			WebsiteItem.brand,
+			WebsiteItem.route,
+			WebsiteItem.website_image,
+			WebsiteItem.thumbnail,
+			WebsiteItem.item_group,
+			WebsiteItem.description,
+			WebsiteItem.web_long_description.as_("website_description"),
+			WebsiteItem.website_warehouse,
+			WebsiteItem.ranking,
+		)
+		.where(WebsiteItem.published == 1)
+	)
 
 	# search term condition
 	if search:
-		query += """ and (item_name like %(search)s
-				or web_item_name like %(search)s
-				or brand like %(search)s
-				or web_long_description like %(search)s)"""
-		search = "%" + cstr(search) + "%"
+		search_term = "%" + cstr(search) + "%"
+		query = query.where(
+			(WebsiteItem.item_name.like(search_term))
+			| (WebsiteItem.web_item_name.like(search_term))
+			| (WebsiteItem.brand.like(search_term))
+			| (WebsiteItem.web_long_description.like(search_term))
+		)
 
-	# order by
-	query += """ ORDER BY ranking desc, modified desc limit %s offset %s""" % (
-		cint(limit),
-		cint(start),
+	# order by and pagination
+	query = (
+		query
+		.orderby(WebsiteItem.ranking, order=frappe.qb.desc)
+		.orderby(WebsiteItem.modified, order=frappe.qb.desc)
+		.limit(cint(limit))
+		.offset(cint(start))
 	)
 
-	return frappe.db.sql(query, {"search": search}, as_dict=1)  # nosemgrep
+	return query.run(as_dict=True)
 
 
 @frappe.whitelist(allow_guest=True)

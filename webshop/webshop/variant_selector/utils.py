@@ -10,7 +10,11 @@ from erpnext.utilities.product import get_price
 
 
 def get_item_codes_by_attributes(attribute_filters, template_item_code=None):
+	"""Get item codes matching the given attribute filters using QueryBuilder."""
 	items = []
+
+	ItemVariantAttribute = frappe.qb.DocType("Item Variant Attribute")
+	Item = frappe.qb.DocType("Item")
 
 	for attribute, values in attribute_filters.items():
 		attribute_values = values
@@ -21,51 +25,41 @@ def get_item_codes_by_attributes(attribute_filters, template_item_code=None):
 		if not attribute_values:
 			continue
 
-		wheres = []
-		query_values = []
+		# Build OR conditions for attribute values
+		attribute_conditions = None
 		for attribute_value in attribute_values:
-			wheres.append("( attribute = %s and attribute_value = %s )")
-			query_values += [attribute, attribute_value]
+			condition = (
+				(ItemVariantAttribute.attribute == attribute)
+				& (ItemVariantAttribute.attribute_value == attribute_value)
+			)
+			if attribute_conditions is None:
+				attribute_conditions = condition
+			else:
+				attribute_conditions = attribute_conditions | condition
 
-		attribute_query = " or ".join(wheres)
-
-		if template_item_code:
-			variant_of_query = "AND t2.variant_of = %s"
-			query_values.append(template_item_code)
-		else:
-			variant_of_query = ""
-
-		query = """
-			SELECT
-				t1.parent
-			FROM
-				`tabItem Variant Attribute` t1
-			WHERE
-				1 = 1
-				AND (
-					{attribute_query}
-				)
-				AND EXISTS (
-					SELECT
-						1
-					FROM
-						`tabItem` t2
-					WHERE
-						t2.name = t1.parent
-						{variant_of_query}
-				)
-			GROUP BY
-				t1.parent
-			ORDER BY
-				NULL
-		""".format(
-			attribute_query=attribute_query, variant_of_query=variant_of_query
+		# Build subquery for item existence check
+		item_subquery = (
+			frappe.qb.from_(Item)
+			.select(Item.name)
+			.where(Item.name == ItemVariantAttribute.parent)
 		)
 
-		item_codes = set([r[0] for r in frappe.db.sql(query, query_values)])  # nosemgrep
+		if template_item_code:
+			item_subquery = item_subquery.where(Item.variant_of == template_item_code)
+
+		# Main query
+		query = (
+			frappe.qb.from_(ItemVariantAttribute)
+			.select(ItemVariantAttribute.parent)
+			.where(attribute_conditions)
+			.where(frappe.qb.exists(item_subquery))
+			.groupby(ItemVariantAttribute.parent)
+		)
+
+		item_codes = set(r[0] for r in query.run())
 		items.append(item_codes)
 
-	res = list(set.intersection(*items))
+	res = list(set.intersection(*items)) if items else []
 
 	return res
 

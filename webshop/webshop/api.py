@@ -3,6 +3,7 @@
 # For license information, please see license.txt
 
 import json
+from typing import Optional, Union
 
 import frappe
 from frappe.utils import cint
@@ -13,7 +14,7 @@ from webshop.webshop.doctype.override_doctype.item_group import get_child_groups
 
 
 @frappe.whitelist(allow_guest=True)
-def get_product_filter_data(query_args=None):
+def get_product_filter_data(query_args: Optional[Union[str, dict]] = None) -> dict:
 	"""
 	Returns filtered products and discount filters.
 
@@ -27,6 +28,9 @@ def get_product_filter_data(query_args=None):
 		start (int): Offset items by
 		item_group (str): Valid Item Group
 		from_filters (bool): Set as True to jump to page 1
+
+	Returns:
+		dict: Contains items, filters, settings, sub_categories, and items_count
 	"""
 	if isinstance(query_args, str):
 		query_args = json.loads(query_args)
@@ -85,5 +89,6 @@ def get_product_filter_data(query_args=None):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_guest_redirect_on_action():
+def get_guest_redirect_on_action() -> Optional[str]:
+	"""Get the redirect URL for guest users on action."""
 	return frappe.db.get_single_value("Webshop Settings", "redirect_on_action")

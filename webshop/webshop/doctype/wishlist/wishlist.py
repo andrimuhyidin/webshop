@@ -11,7 +11,7 @@ class Wishlist(Document):
 
 
 @frappe.whitelist()
-def add_to_wishlist(item_code):
+def add_to_wishlist(item_code: str) -> None:
 	"""Insert Item into wishlist."""
 
 	if frappe.db.exists("Wishlist Item", {"item_code": item_code, "parent": frappe.session.user}):
@@ -59,7 +59,8 @@ def add_to_wishlist(item_code):
 
 
 @frappe.whitelist()
-def remove_from_wishlist(item_code):
+def remove_from_wishlist(item_code: str) -> None:
+	"""Remove item from wishlist."""
 	if frappe.db.exists("Wishlist Item", {"item_code": item_code, "parent": frappe.session.user}):
 		frappe.db.delete("Wishlist Item", {"item_code": item_code, "parent": frappe.session.user})
 		frappe.db.commit()  # nosemgrep

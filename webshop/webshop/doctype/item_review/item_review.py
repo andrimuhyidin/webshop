@@ -3,6 +3,7 @@
 # For license information, please see license.txt
 
 from datetime import datetime
+from typing import Optional
 
 import frappe
 from frappe import _
@@ -20,20 +21,25 @@ class UnverifiedReviewer(frappe.ValidationError):
 
 
 class ItemReview(Document):
-	def after_insert(self):
+	def after_insert(self) -> None:
 		# regenerate cache on review creation
 		reviews_dict = get_queried_reviews(self.website_item)
 		set_reviews_in_cache(self.website_item, reviews_dict)
 
-	def after_delete(self):
+	def after_delete(self) -> None:
 		# regenerate cache on review deletion
 		reviews_dict = get_queried_reviews(self.website_item)
 		set_reviews_in_cache(self.website_item, reviews_dict)
 
 
 @frappe.whitelist()
-def get_item_reviews(web_item, start=0, end=10, data=None):
-	"Get Website Item Review Data."
+def get_item_reviews(
+	web_item: str,
+	start: int = 0,
+	end: int = 10,
+	data: Optional[dict] = None
+) -> dict:
+	"""Get Website Item Review Data."""
 	start, end = cint(start), cint(end)
 	settings = get_shopping_cart_settings()
 
@@ -56,7 +62,12 @@ def get_item_reviews(web_item, start=0, end=10, data=None):
 	return data
 
 
-def get_queried_reviews(web_item, start=0, end=10, data=None):
+def get_queried_reviews(
+	web_item: str,
+	start: int = 0,
+	end: int = 10,
+	data: Optional[dict] = None
+) -> dict:
 	"""
 	Query Website Item wise reviews and cache if needed.
 	Cache stores only first page of reviews i.e. 10 reviews maximum.
@@ -99,12 +110,18 @@ def get_queried_reviews(web_item, start=0, end=10, data=None):
 	return data
 
 
-def set_reviews_in_cache(web_item, reviews_dict):
+def set_reviews_in_cache(web_item: str, reviews_dict: dict) -> None:
+	"""Cache reviews for a website item."""
 	frappe.cache().hset("item_reviews", web_item, reviews_dict)
 
 
 @frappe.whitelist()
-def add_item_review(web_item, title, rating, comment=None):
+def add_item_review(
+	web_item: str,
+	title: str,
+	rating: float,
+	comment: Optional[str] = None
+) -> None:
 	"""Add an Item Review by a user if non-existent."""
 	if frappe.session.user == "Guest":
 		# guest user should not reach here ideally in the case they do via an API, throw error
@@ -127,9 +144,15 @@ def add_item_review(web_item, title, rating, comment=None):
 		doc.save()
 
 
-def get_customer(silent=False):
+def get_customer(silent: bool = False) -> Optional[str]:
 	"""
-	silent: Return customer if exists else return nothing. Dont throw error.
+	Get customer linked to current user.
+
+	Args:
+		silent: Return customer if exists else return nothing. Don't throw error.
+
+	Returns:
+		Customer name if found, None if silent=True and not found.
 	"""
 	user = frappe.session.user
 	contact_name = get_contact_name(user)
