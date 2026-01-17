@@ -222,13 +222,15 @@ def get_active_integrations():
 		"compliance": False
 	}
 	
-	if frappe.get_app_hooks("bizops_tour_travel"):
+	installed_apps = frappe.get_installed_apps()
+	
+	if "bizops_tour_travel" in installed_apps:
 		integrations["travel"] = True
 		
-	if frappe.get_app_hooks("bizops_wallet"):
+	if "bizops_wallet" in installed_apps:
 		integrations["wallet"] = True
 		
-	if frappe.get_app_hooks("bizops_compliance_id"):
+	if "bizops_compliance_id" in installed_apps:
 		integrations["compliance"] = True
 		
 	return integrations
