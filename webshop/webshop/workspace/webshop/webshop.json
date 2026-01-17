@@ -1,0 +1,151 @@
+{
+ "charts": [],
+ "content": [
+  {
+   "type": "header",
+   "data": {
+    "text": "Webshop Management",
+    "level": 4,
+    "col": 12
+   }
+  },
+  {
+   "type": "shortcut",
+   "data": {
+    "shortcut_name": "Website Item",
+    "col": 4
+   }
+  },
+  {
+   "type": "shortcut",
+   "data": {
+    "shortcut_name": "Item Review",
+    "col": 4
+   }
+  },
+  {
+   "type": "shortcut",
+   "data": {
+    "shortcut_name": "Wishlist",
+    "col": 4
+   }
+  },
+  {
+   "type": "header",
+   "data": {
+    "text": "Configuration",
+    "level": 4,
+    "col": 12
+   }
+  },
+  {
+   "type": "shortcut",
+   "data": {
+    "shortcut_name": "Webshop Settings",
+    "col": 4
+   }
+  }
+ ],
+ "creation": "2024-03-12 10:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "shopping-cart",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Webshop",
+ "links": [
+  {
+   "label": "Webshop",
+   "link_count": 0,
+   "link_to": "Webshop",
+   "link_type": "Module Profile",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "label": "Website Item",
+   "link_count": 0,
+   "link_to": "Website Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "label": "Item Review",
+   "link_count": 0,
+   "link_to": "Item Review",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "label": "Wishlist",
+   "link_count": 0,
+   "link_to": "Wishlist",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "label": "Webshop Settings",
+   "link_count": 0,
+   "link_to": "Webshop Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-03-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Webshop",
+ "name": "Webshop",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "icon": "box",
+   "label": "Website Item",
+   "link_to": "Website Item",
+   "stats_filter": "{\"published\": 1}",
+   "type": "DocType",
+   "url": ""
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "icon": "star",
+   "label": "Item Review",
+   "link_to": "Item Review",
+   "type": "DocType",
+   "url": ""
+  },
+  {
+   "color": "Pink",
+   "doc_view": "List",
+   "icon": "heart",
+   "label": "Wishlist",
+   "link_to": "Wishlist",
+   "type": "DocType",
+   "url": ""
+  },
+  {
+   "color": "Grey",
+   "doc_view": "Form",
+   "icon": "settings",
+   "label": "Webshop Settings",
+   "link_to": "Webshop Settings",
+   "type": "DocType",
+   "url": ""
+  }
+ ],
+ "title": "Webshop"
+}

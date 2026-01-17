@@ -27,6 +27,9 @@ class WebshopSettings(Document):
 		self.is_redisearch_loaded = is_search_module_loaded()
 
 	def validate(self):
+		if self.enabled:
+			self.validate_required_setup()
+			
 		self.validate_field_filters(self.filter_fields, self.enable_field_filters)
 		self.validate_attribute_filters()
 		self.validate_checkout()
@@ -40,6 +43,29 @@ class WebshopSettings(Document):
 		self.is_redisearch_enabled_pre_save = frappe.db.get_single_value(
 			"Webshop Settings", "is_redisearch_enabled"
 		)
+	
+	def validate_required_setup(self):
+		"""Validate that required fields are filled before enabling shopping cart"""
+		if not self.company:
+			frappe.throw(
+				_("Company is required to enable shopping cart. Please create a Company first."),
+				title=_("Missing Required Field"),
+				exc=ShoppingCartSetupError
+			)
+		
+		if not self.price_list:
+			frappe.throw(
+				_("Price List is required to enable shopping cart. Please create a Price List first."),
+				title=_("Missing Required Field"),
+				exc=ShoppingCartSetupError
+			)
+		
+		if not self.default_customer_group:
+			frappe.throw(
+				_("Default Customer Group is required to enable shopping cart."),
+				title=_("Missing Required Field"),
+				exc=ShoppingCartSetupError
+			)
 
 	def after_save(self):
 		self.create_redisearch_indexes()

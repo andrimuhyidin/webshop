@@ -1,32 +1,65 @@
-{% extends "templates/web.html" %}
-
-{% block title %} {{ _("Product Search") }} {% endblock %}
-
-{% block header %}<h2>{{ _("Product Search") }}</h2>{% endblock %}
-
-{% block page_content %}
-<script>{% include "templates/includes/product_list.js" %}</script>
-
+{% extends "templates/web.html" %} {% block title %} {{ _("Product Search") }}
+{% endblock %} {% block header %}
+<h2>{{ _("Product Search") }}</h2>
+{% endblock %} {% block page_content %}
 <script>
-frappe.ready(function() {
-	var txt = frappe.utils.get_url_arg("search");
-	$(".search-results").html('{{ _("Search results for") + ": " + html2text(frappe.form_dict.search or "") | e | trim }}');
-	window.search = txt;
-	window.start = 0;
-	window.get_product_list();
-});
+  // Product search functionality
+  window.get_product_list = function () {
+    frappe.call({
+      method: "webshop.templates.pages.product_search.get_product_list",
+      args: {
+        search: window.search,
+        start: window.start || 0,
+        limit: 12,
+      },
+      callback: function (r) {
+        if (r.message) {
+          var html = r.message
+            .map(function (item) {
+              return item;
+            })
+            .join("");
+
+          if (window.start === 0) {
+            $("#search-list").html(html);
+          } else {
+            $("#search-list").append(html);
+          }
+
+          if (r.message.length === 12) {
+            $(".more-btn").show();
+          } else {
+            $(".more-btn").hide();
+          }
+        }
+      },
+    });
+  };
+
+  frappe.ready(function () {
+    var txt = frappe.utils.get_url_arg("search");
+    $(".search-results").html(
+      '{{ _("Search results for") + ": " + html2text(frappe.form_dict.search or "") | e | trim }}',
+    );
+    window.search = txt;
+    window.start = 0;
+    window.get_product_list();
+
+    // More button click handler
+    $(".more-btn button").on("click", function () {
+      window.start += 12;
+      window.get_product_list();
+    });
+  });
 </script>
 
 <div class="product-search-content">
-    <h3 class="search-results">{{ _("Search Results") }}</h3>
-	<div id="search-list" class="row">
-
-	</div>
-	<div style="text-align: center;">
-		<div class="more-btn"
-			style="display: none; text-align: center;">
-            <button class="btn btn-light">{{ _("More...") }}</button>
-		</div>
-	</div>
+  <h3 class="search-results">{{ _("Search Results") }}</h3>
+  <div id="search-list" class="row"></div>
+  <div style="text-align: center">
+    <div class="more-btn" style="display: none; text-align: center">
+      <button class="btn btn-light">{{ _("More...") }}</button>
+    </div>
+  </div>
 </div>
 {% endblock %}

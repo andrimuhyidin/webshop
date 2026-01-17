@@ -33,25 +33,41 @@ def set_cart_count(quotation=None):
 
 @frappe.whitelist()
 def get_cart_quotation(doc=None):
-	party = get_party()
+	try:
+		cart_settings = frappe.get_cached_doc("Webshop Settings")
+		if not cart_settings.enabled:
+			return {}
 
-	if not doc:
-		quotation = _get_cart_quotation(party)
-		doc = quotation
-		set_cart_count(quotation)
+		party = get_party()
 
-	addresses = get_address_docs(party=party)
+		if not doc:
+			quotation = _get_cart_quotation(party)
+			doc = quotation
+			set_cart_count(quotation)
 
-	if not doc.customer_address and addresses:
-		update_cart_address("billing", addresses[0].name)
+		addresses = get_address_docs(party=party)
 
-	return {
-		"doc": decorate_quotation_doc(doc),
-		"shipping_addresses": get_shipping_addresses(party),
-		"billing_addresses": get_billing_addresses(party),
-		"shipping_rules": get_applicable_shipping_rules(party),
-		"cart_settings": frappe.get_cached_doc("Webshop Settings"),
-	}
+		if not doc.customer_address and addresses:
+			update_cart_address("billing", addresses[0].name)
+
+		return {
+			"doc": decorate_quotation_doc(doc),
+			"shipping_addresses": get_shipping_addresses(party),
+			"billing_addresses": get_billing_addresses(party),
+			"shipping_rules": get_applicable_shipping_rules(party),
+			"cart_settings": cart_settings,
+		}
+	except Exception as e:
+		frappe.log_error("Cart Error: Unable to fetch cart quotation", str(e))
+		# Return a safe fallback structure to prevent frontend crashes
+		return {
+			"doc": {},
+			"shipping_addresses": [],
+			"billing_addresses": [],
+			"shipping_rules": [],
+			"cart_settings": {},
+			"error": _("Unable to load cart. Please contact support.")
+		}
 
 
 @frappe.whitelist()
