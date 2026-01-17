@@ -10,6 +10,16 @@ app_version = _version
 
 required_apps = ["payments", "erpnext"]
 
+# Desktop icon
+add_to_apps_screen = [
+	{
+		"name": "webshop",
+		"title": "Webshop",
+		"icon": "shopping-cart",
+		"route": "/app/webshop",
+	}
+]
+
 web_include_css = "webshop-web.bundle.css"
 
 web_include_js = "web.bundle.js"
