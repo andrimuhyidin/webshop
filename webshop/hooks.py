@@ -60,6 +60,11 @@ doc_events = {
             "webshop.webshop.crud_events.quotation.validate_shopping_cart_items.execute",
         ],
     },
+    "Sales Order": {
+        "before_save": [
+            "webshop.webshop.crud_events.sales_order.process_metadata.process_order_metadata"
+        ]
+    },
     "Price List": {
         "validate": [
             "webshop.webshop.crud_events.price_list.check_impact_on_cart.execute"

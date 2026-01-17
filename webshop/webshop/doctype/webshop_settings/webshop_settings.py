@@ -209,3 +209,26 @@ def check_shopping_cart_enabled():
 
 def show_attachments():
 	return get_shopping_cart_settings().show_attachments
+
+@frappe.whitelist()
+def get_active_integrations():
+	"""
+	Return list of active integrations based on installed apps and settings.
+	"""
+	settings = get_shopping_cart_settings()
+	integrations = {
+		"travel": False,
+		"wallet": False,
+		"compliance": False
+	}
+	
+	if frappe.get_app_hooks("bizops_tour_travel"):
+		integrations["travel"] = True
+		
+	if frappe.get_app_hooks("bizops_wallet"):
+		integrations["wallet"] = True
+		
+	if frappe.get_app_hooks("bizops_compliance_id"):
+		integrations["compliance"] = True
+		
+	return integrations
