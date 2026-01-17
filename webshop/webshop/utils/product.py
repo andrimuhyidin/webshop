@@ -27,15 +27,21 @@ def get_web_item_qty_in_stock(item_code, item_warehouse_field, warehouse=None):
 	total_stock = 0.0
 	if warehouses:
 		for warehouse in warehouses:
-			stock_qty = frappe.db.sql(
-				"""
-				select S.actual_qty / IFNULL(C.conversion_factor, 1)
-				from tabBin S
-				inner join `tabItem` I on S.item_code = I.Item_code
-				left join `tabUOM Conversion Detail` C on I.sales_uom = C.uom and C.parent = I.Item_code
-				where S.item_code=%s and S.warehouse=%s""",
-				(item_code, warehouse),
-			)
+			# Refactored to QueryBuilder
+			bin = frappe.qb.DocType("Bin")
+			item = frappe.qb.DocType("Item")
+			uom_conversion = frappe.qb.DocType("UOM Conversion Detail")
+
+			stock_qty = (
+				frappe.qb.from_(bin)
+				.inner_join(item).on(bin.item_code == item.item_code)
+				.left_join(uom_conversion).on(
+					(item.sales_uom == uom_conversion.uom) & (uom_conversion.parent == item.item_code)
+				)
+				.select(bin.actual_qty / frappe.qb.functions.Coalesce(uom_conversion.conversion_factor, 1))
+				.where(bin.item_code == item_code)
+				.where(bin.warehouse == warehouse)
+			).run()
 
 			if stock_qty:
 				total_stock += adjust_qty_for_expired_items(item_code, stock_qty, warehouse)
