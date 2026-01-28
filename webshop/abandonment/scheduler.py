@@ -6,8 +6,7 @@ Scheduler functions for cart abandonment tracking.
 """
 
 import frappe
-from frappe import _
-from frappe.utils import nowdatetime, add_hours, getdate
+from frappe.utils import nowdatetime, add_hours
 from webshop.abandonment.notifications import send_abandonment_email
 
 

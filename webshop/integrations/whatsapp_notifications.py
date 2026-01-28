@@ -8,8 +8,7 @@ Sends order notifications via WhatsApp when frappe_whatsapp app is installed.
 """
 
 import frappe
-from frappe import _
-from frappe.utils import fmt_money, get_url
+from frappe.utils import fmt_money
 from typing import Optional
 
 
