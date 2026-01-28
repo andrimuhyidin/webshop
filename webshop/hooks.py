@@ -72,11 +72,31 @@ doc_events = {
         "validate": [
             "webshop.webshop.crud_events.quotation.validate_shopping_cart_items.execute",
         ],
+        "on_update": [
+            "webshop.abandonment.tracker.track_cart_activity",
+        ],
+        "on_submit": [
+            "webshop.abandonment.tracker.mark_cart_recovered",
+        ],
     },
     "Sales Order": {
         "before_save": [
             "webshop.webshop.crud_events.sales_order.process_metadata.process_order_metadata"
-        ]
+        ],
+        "on_submit": [
+            "webshop.abandonment.tracker.mark_cart_recovered_from_order",
+            "webshop.integrations.whatsapp_notifications.send_order_confirmation",
+        ],
+    },
+    "Delivery Note": {
+        "on_submit": [
+            "webshop.integrations.whatsapp_notifications.send_order_shipped",
+        ],
+    },
+    "Payment Entry": {
+        "on_submit": [
+            "webshop.integrations.whatsapp_notifications.send_payment_received",
+        ],
     },
     "Price List": {
         "validate": [
@@ -88,6 +108,18 @@ doc_events = {
             "webshop.webshop.crud_events.tax_rule.validate_use_for_cart.execute",
         ],
     },
+}
+
+# Scheduled Tasks
+scheduler_events = {
+    "hourly": [
+        "webshop.abandonment.scheduler.detect_abandoned_carts",
+        "webshop.abandonment.scheduler.send_abandonment_notifications",
+        "webshop.abandonment.scheduler.sync_cart_status",
+    ],
+    "daily": [
+        "webshop.abandonment.scheduler.cleanup_expired_carts",
+    ],
 }
 
 has_website_permission = {

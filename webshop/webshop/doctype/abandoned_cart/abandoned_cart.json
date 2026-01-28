@@ -1,0 +1,270 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-01-28 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "quotation",
+  "customer",
+  "customer_name",
+  "column_break_1",
+  "customer_email",
+  "customer_phone",
+  "status",
+  "section_break_cart",
+  "cart_value",
+  "items_count",
+  "column_break_2",
+  "currency",
+  "cart_items_summary",
+  "section_break_dates",
+  "abandoned_at",
+  "last_activity_at",
+  "column_break_3",
+  "recovered_at",
+  "expires_at",
+  "section_break_notifications",
+  "notification_count",
+  "last_notification_at",
+  "column_break_4",
+  "recovery_token",
+  "recovery_url",
+  "section_break_recovery",
+  "recovery_order",
+  "recovery_source",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "AC-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quotation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Quotation",
+   "options": "Quotation",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_email",
+   "fieldtype": "Data",
+   "label": "Customer Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "customer_phone",
+   "fieldtype": "Data",
+   "label": "Customer Phone",
+   "options": "Phone"
+  },
+  {
+   "default": "Abandoned",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Abandoned\nNotified\nRecovered\nExpired\nConverted",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_cart",
+   "fieldtype": "Section Break",
+   "label": "Cart Details"
+  },
+  {
+   "fieldname": "cart_value",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Cart Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "items_count",
+   "fieldtype": "Int",
+   "label": "Items Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cart_items_summary",
+   "fieldtype": "Small Text",
+   "label": "Items Summary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_dates",
+   "fieldtype": "Section Break",
+   "label": "Dates"
+  },
+  {
+   "fieldname": "abandoned_at",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Abandoned At",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_activity_at",
+   "fieldtype": "Datetime",
+   "label": "Last Activity At"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recovered_at",
+   "fieldtype": "Datetime",
+   "label": "Recovered At"
+  },
+  {
+   "fieldname": "expires_at",
+   "fieldtype": "Datetime",
+   "label": "Expires At"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_notifications",
+   "fieldtype": "Section Break",
+   "label": "Notification Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "notification_count",
+   "fieldtype": "Int",
+   "label": "Notification Count"
+  },
+  {
+   "fieldname": "last_notification_at",
+   "fieldtype": "Datetime",
+   "label": "Last Notification At"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recovery_token",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Recovery Token"
+  },
+  {
+   "fieldname": "recovery_url",
+   "fieldtype": "Data",
+   "label": "Recovery URL",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_recovery",
+   "fieldtype": "Section Break",
+   "label": "Recovery Details"
+  },
+  {
+   "fieldname": "recovery_order",
+   "fieldtype": "Link",
+   "label": "Recovery Order",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "recovery_source",
+   "fieldtype": "Select",
+   "label": "Recovery Source",
+   "options": "\nEmail Link\nDirect\nWhatsApp\nOther"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Abandoned Cart",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-28 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Webshop",
+ "name": "Abandoned Cart",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User"
+  }
+ ],
+ "sort_field": "abandoned_at",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
