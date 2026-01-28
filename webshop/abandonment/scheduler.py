@@ -6,7 +6,7 @@ Scheduler functions for cart abandonment tracking.
 """
 
 import frappe
-from frappe.utils import now_datetime, add_hours
+from frappe.utils import now_datetime, add_to_date
 from webshop.abandonment.notifications import send_abandonment_email
 
 
@@ -24,7 +24,7 @@ def detect_abandoned_carts():
 		return
 	
 	threshold_hours = getattr(settings, "abandonment_threshold_hours", 24) or 24
-	threshold_time = add_hours(now_datetime(), -threshold_hours)
+	threshold_time = add_to_date(now_datetime(), hours=-threshold_hours)
 	
 	# Find abandoned carts (draft quotations not modified within threshold)
 	abandoned_quotations = frappe.db.sql("""
