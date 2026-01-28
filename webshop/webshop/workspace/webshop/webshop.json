@@ -1,4 +1,5 @@
 {
+ "app": "webshop",
  "charts": [],
  "content": "[{\"type\": \"header\", \"data\": {\"text\": \"Webshop Management\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Website Item\", \"col\": 4}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item Review\", \"col\": 4}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Wishlist\", \"col\": 4}}, {\"type\": \"header\", \"data\": {\"text\": \"Configuration\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Webshop Settings\", \"col\": 4}}]",
  "creation": "2024-03-12 10:00:00.000000",
