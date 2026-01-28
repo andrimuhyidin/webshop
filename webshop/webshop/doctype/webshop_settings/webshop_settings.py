@@ -20,6 +20,14 @@ class ShoppingCartSetupError(frappe.ValidationError):
 
 
 class WebshopSettings(Document):
+	"""
+	Webshop Settings for e-commerce configuration.
+	
+	Central configuration for the webshop module including shopping cart
+	settings, price lists, checkout options, search indexing, and
+	product filtering configurations.
+	"""
+
 	def onload(self):
 		self.get("__onload").quotation_series = frappe.get_meta("Quotation").get_options("naming_series")
 

@@ -34,6 +34,14 @@ from webshop.webshop.variant_selector.item_variants_cache import (
 
 
 class WebsiteItem(WebsiteGenerator):
+	"""
+	Website Item for e-commerce product display.
+	
+	Represents a product on the website storefront with pricing,
+	images, variants, and search indexing capabilities. Links to
+	the underlying Item master for stock and accounting.
+	"""
+
 	website = frappe._dict(
 		page_title_field="web_item_name",
 		condition_field="published",

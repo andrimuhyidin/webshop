@@ -21,6 +21,24 @@ class UnverifiedReviewer(frappe.ValidationError):
 
 
 class ItemReview(Document):
+	"""
+	Item Review document for website product reviews.
+	
+	Allows customers to leave ratings and comments on website items.
+	Reviews are cached for performance optimization.
+	"""
+
+	def validate(self) -> None:
+		"""Validate review data before saving."""
+		self.validate_rating()
+
+	def validate_rating(self) -> None:
+		"""Ensure rating is within valid range (0.0 to 1.0 for Frappe Rating field)."""
+		if self.rating is not None:
+			rating = flt(self.rating)
+			if rating < 0 or rating > 1:
+				frappe.throw(_("Rating must be between 0 and 1 (representing 0 to 5 stars)"))
+
 	def after_insert(self) -> None:
 		# regenerate cache on review creation
 		reviews_dict = get_queried_reviews(self.website_item)

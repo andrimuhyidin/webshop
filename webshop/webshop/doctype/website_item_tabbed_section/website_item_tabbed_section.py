@@ -7,4 +7,11 @@ from frappe.model.document import Document
 
 
 class WebsiteItemTabbedSection(Document):
+	"""
+	Website Item Tabbed Section child table entry.
+	
+	Stores tabbed content sections for detailed product
+	information on the product detail page.
+	"""
+
 	pass

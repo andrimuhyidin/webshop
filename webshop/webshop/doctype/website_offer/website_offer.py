@@ -7,6 +7,13 @@ from frappe.model.document import Document
 
 
 class WebsiteOffer(Document):
+	"""
+	Website Offer for promotional banners and discounts.
+	
+	Displays promotional offers, discounts, and special deals on
+	the website storefront with configurable offer details.
+	"""
+
 	pass
 
 

@@ -7,4 +7,11 @@ from frappe.model.document import Document
 
 
 class WishlistItem(Document):
+	"""
+	Wishlist Item child table entry.
+	
+	Stores individual items in a user's wishlist with item details,
+	images, and warehouse information for display purposes.
+	"""
+
 	pass

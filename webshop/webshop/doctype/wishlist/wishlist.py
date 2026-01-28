@@ -3,11 +3,29 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
 class Wishlist(Document):
-	pass
+	"""
+	Wishlist document for storing user's desired items.
+	
+	Each user has one wishlist document that contains multiple wishlist items.
+	The document is auto-named by the user field.
+	"""
+
+	def validate(self) -> None:
+		"""Validate wishlist data before saving."""
+		self.validate_user()
+
+	def validate_user(self) -> None:
+		"""Ensure user is set and valid."""
+		if not self.user:
+			frappe.throw(_("User is required for Wishlist"))
+		
+		if self.user == "Guest":
+			frappe.throw(_("Guest users cannot have a wishlist"))
 
 
 @frappe.whitelist()

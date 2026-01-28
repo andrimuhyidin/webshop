@@ -6,4 +6,11 @@ from frappe.model.document import Document
 
 
 class HomepageFeaturedProduct(Document):
+	"""
+	Homepage Featured Product child table entry.
+	
+	Stores featured products to be displayed prominently
+	on the website homepage.
+	"""
+
 	pass
