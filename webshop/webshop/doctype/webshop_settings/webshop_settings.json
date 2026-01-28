@@ -40,6 +40,16 @@
   "save_quotations_as_draft",
   "payment_gateway_account",
   "payment_success_url",
+  "cart_abandonment_section",
+  "enable_cart_abandonment",
+  "abandonment_threshold_hours",
+  "column_break_abandonment",
+  "max_abandonment_notifications",
+  "notification_interval_hours",
+  "cart_expiry_days",
+  "abandonment_email_template",
+  "whatsapp_integration_section",
+  "enable_whatsapp_notifications",
   "add_ons_section",
   "enable_wishlist",
   "column_break_22",
@@ -272,6 +282,75 @@
    "fieldtype": "Link",
    "label": "Slideshow",
    "options": "Website Slideshow"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "enabled",
+   "fieldname": "cart_abandonment_section",
+   "fieldtype": "Section Break",
+   "label": "Cart Abandonment"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_cart_abandonment",
+   "fieldtype": "Check",
+   "label": "Enable Cart Abandonment Tracking"
+  },
+  {
+   "default": "24",
+   "depends_on": "enable_cart_abandonment",
+   "description": "Mark cart as abandoned if not updated within this many hours",
+   "fieldname": "abandonment_threshold_hours",
+   "fieldtype": "Int",
+   "label": "Abandonment Threshold (hours)"
+  },
+  {
+   "fieldname": "column_break_abandonment",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "3",
+   "depends_on": "enable_cart_abandonment",
+   "fieldname": "max_abandonment_notifications",
+   "fieldtype": "Int",
+   "label": "Max Notifications per Cart"
+  },
+  {
+   "default": "24",
+   "depends_on": "enable_cart_abandonment",
+   "description": "Minimum hours between notifications",
+   "fieldname": "notification_interval_hours",
+   "fieldtype": "Int",
+   "label": "Notification Interval (hours)"
+  },
+  {
+   "default": "30",
+   "depends_on": "enable_cart_abandonment",
+   "description": "Days before abandoned cart expires",
+   "fieldname": "cart_expiry_days",
+   "fieldtype": "Int",
+   "label": "Cart Expiry (days)"
+  },
+  {
+   "depends_on": "enable_cart_abandonment",
+   "fieldname": "abandonment_email_template",
+   "fieldtype": "Link",
+   "label": "Abandonment Email Template",
+   "options": "Email Template"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "enabled",
+   "fieldname": "whatsapp_integration_section",
+   "fieldtype": "Section Break",
+   "label": "WhatsApp Integration"
+  },
+  {
+   "default": "0",
+   "description": "Send order notifications via WhatsApp (requires frappe_whatsapp app)",
+   "fieldname": "enable_whatsapp_notifications",
+   "fieldtype": "Check",
+   "label": "Enable WhatsApp Notifications"
   },
   {
    "collapsible": 1,
