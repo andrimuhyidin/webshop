@@ -67,9 +67,24 @@ def get_product_filter_data(query_args: Optional[Union[str, dict]] = None) -> di
 			start=start,
 			item_group=item_group,
 		)
-	except Exception:
-		frappe.log_error("Product query with filter failed")
-		return {"exc": "Something went wrong!"}
+	except frappe.QueryDeadlockError:
+		frappe.log_error(
+			f"Database deadlock during product query: search={search}, item_group={item_group}",
+			"Product Query Error"
+		)
+		return {"exc": "Database is busy. Please try again."}
+	except frappe.QueryTimeoutError:
+		frappe.log_error(
+			f"Query timeout during product search: search={search}",
+			"Product Query Error"
+		)
+		return {"exc": "Search took too long. Please try a more specific search."}
+	except Exception as e:
+		frappe.log_error(
+			f"Product query failed: {str(e)}\nFilters: {field_filters}\nSearch: {search}",
+			"Product Query Error"
+		)
+		return {"exc": "Something went wrong while searching products."}
 
 	# discount filter data
 	filters = {}

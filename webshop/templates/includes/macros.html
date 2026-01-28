@@ -51,7 +51,7 @@
 				<div itemprop="image" class="card-body">
 					<h5 class="card-title">{{ _(card.title) }}</h5>
 					<p class="card-subtitle mb-2 text-muted">{{ _(card.subtitle) or '' }}</p>
-					<p class="card-text">{{ card.content or '' | truncate(140, True) }}</p>
+					<p class="card-text">{{ (card.content or '') | e | truncate(140, True) }}</p>
 				</div>
 				<div class="card-body flex-grow-0">
 					<a href="{{ card.route }}" class="card-link">{{ _('More details') }}</a>
@@ -134,7 +134,7 @@
 	</div>
 	{% if is_featured %}
 		<div class="product-description ellipsis text-muted" style="white-space: normal;">
-			{{ _(description) or '' }}
+			{{ (_(description) or '') | e }}
 		</div>
 	{% else %}
 		{% if template != "Product Card" %}
@@ -279,7 +279,7 @@
 			{% if review.comment %}
 				<div class="product-description mb-4">
 					<p>
-						{{ _(review.comment) }}
+						{{ (_(review.comment)) | e }}
 					</p>
 				</div>
 			{% endif %}

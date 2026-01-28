@@ -21,6 +21,56 @@ class WebsitePriceListMissingError(frappe.ValidationError):
     pass
 
 
+def _validate_cart_user():
+    """
+    Validate that the current user is authenticated and can perform cart operations.
+    
+    Security: Ensures cart operations are performed by logged-in users
+    who have a valid customer/lead association.
+    
+    Raises:
+        frappe.PermissionError: If user is not authenticated
+    """
+    if frappe.session.user == "Guest":
+        frappe.throw(_("Please log in to perform this action"), frappe.PermissionError)
+
+
+def _validate_address_ownership(address_doc):
+    """
+    Validate that the address being created/modified belongs to the current user.
+    
+    Security: Prevents users from creating addresses for other customers.
+    
+    Args:
+        address_doc: Address document dict
+        
+    Raises:
+        frappe.PermissionError: If address doesn't belong to current user
+    """
+    if frappe.session.user == "Guest":
+        frappe.throw(_("Please log in to add addresses"), frappe.PermissionError)
+    
+    # Get current user's customer/lead
+    party = get_party()
+    if not party:
+        frappe.throw(_("No customer account found for current user"), frappe.PermissionError)
+    
+    # Validate the address link
+    links = address_doc.get("links", [])
+    for link in links:
+        link_doctype = link.get("link_doctype")
+        link_name = link.get("link_name")
+        
+        if link_doctype == party.doctype and link_name == party.name:
+            return True
+    
+    # If no matching link found, this is suspicious
+    frappe.log_error(
+        f"User {frappe.session.user} attempted to create address for unauthorized party",
+        "Cart Security Warning"
+    )
+
+
 def set_cart_count(quotation=None):
 	if cint(frappe.db.get_singles_value("Webshop Settings", "enabled")):
 		if not quotation:
@@ -104,6 +154,14 @@ def get_billing_addresses(party=None):
 
 @frappe.whitelist()
 def place_order():
+	"""Place an order from the shopping cart.
+	
+	Security: Validates that user is authenticated before placing order.
+	Uses ignore_permissions for backend processing after user validation.
+	"""
+	# Security: Validate user is authenticated
+	_validate_cart_user()
+	
 	quotation = _get_cart_quotation()
 	cart_settings = frappe.get_cached_doc("Webshop Settings")
 	quotation.company = cart_settings.company
@@ -242,8 +300,20 @@ def get_shopping_cart_menu(context=None):
 
 @frappe.whitelist()
 def add_new_address(doc):
+	"""Add a new address for the current user's cart.
+	
+	Security: Validates that user is authenticated and the address
+	is linked to the current user's customer/lead account.
+	"""
+	# Security: Validate user is authenticated
+	_validate_cart_user()
+	
 	doc = frappe.parse_json(doc)
 	doc.update({"doctype": "Address"})
+	
+	# Security: Validate address ownership
+	_validate_address_ownership(doc)
+	
 	address = frappe.get_doc(doc)
 	address.save(ignore_permissions=True)
 
