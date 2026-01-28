@@ -22,7 +22,10 @@ add_to_apps_screen = [
 
 web_include_css = "webshop-web.bundle.css"
 
-web_include_js = "web.bundle.js"
+web_include_js = [
+	"web.bundle.js",
+	"/assets/webshop/js/indonesia_logistics.js"
+]
 
 after_install = "webshop.setup.install.after_install"
 on_logout = "webshop.webshop.shopping_cart.utils.clear_cart_count"

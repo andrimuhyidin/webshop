@@ -59,6 +59,16 @@
 						{{ _("Valid Till") }}: {{ frappe.utils.format_date(doc.valid_till, 'medium') }}
 					</p>
 				{% endif %}
+				
+				{% if doc.custom_tracking_number %}
+					<div class="mt-2 p-2 bg-success-light border border-success rounded d-inline-block">
+						<i class="fa fa-truck mr-1"></i> 
+						{{ _("Tracking Number") }}: 
+						<a href="https://www.cekresi.com/?noresi={{ doc.custom_tracking_number }}" target="_blank" class="font-weight-bold">
+							{{ doc.custom_tracking_number }}
+						</a>
+					</div>
+				{% endif %}
 			</div>
 		</div>
 		<div class="row indicator-container mt-2">

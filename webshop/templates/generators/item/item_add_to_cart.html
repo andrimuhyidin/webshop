@@ -117,6 +117,14 @@
 				{% if cart_settings.show_contact_us_button %}
 					{% include "templates/generators/item/item_inquiry.html" %}
 				{% endif %}
+
+				<!-- WhatsApp Inquiry -->
+				{% if cart_settings.custom_enable_whatsapp_inquiry and cart_settings.custom_whatsapp_inquiry_number %}
+					<a href="https://wa.me/{{ cart_settings.custom_whatsapp_inquiry_number }}?text={{ _('Halo, saya ingin tanya tentang {0}').format(doc.item_name) | urlencode }}" 
+						class="btn btn-outline-success ml-2 d-flex align-items-center" target="_blank">
+						<i class="fa fa-whatsapp mr-2"></i> {{ _("Tanya via WhatsApp") }}
+					</a>
+				{% endif %}
 			</div>
 		</div>
 	</div>

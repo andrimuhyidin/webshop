@@ -50,7 +50,19 @@
 					<td class="bill-content net-total text-right">{{ doc.get_formatted("grand_total") }}</td>
 				</tr>
 			</table>
-		{% endif %}
+
+			<div class="payment-methods-trust mt-4 p-3 border rounded text-center bg-light">
+				<p class="small text-muted mb-2">{{ _("Secure Payment via Midtrans/Xendit") }}</p>
+				<div class="d-flex justify-content-center flex-wrap" style="gap: 10px;">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="BCA" height="20">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri" height="15">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_BNI.svg" alt="BNI" height="15">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dan_Nama_Bank_BRI.svg" alt="BRI" height="15">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" alt="QRIS" height="20">
+					<img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Gopay_logo.svg" alt="GOPAY" height="15">
+				</div>
+			</div>
+{% endif %}
 	</div>
 </div>
 

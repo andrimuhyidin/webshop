@@ -93,7 +93,8 @@ frappe.ready(() => {
 					label: '{{ _("City/Town") }}',
 					fieldname: 'city',
 					fieldtype: 'Data',
-					reqd: 1
+					reqd: 1,
+					description: '<a href="#" class="btn-search-city small text-primary">{{ _("Cari Kota (RajaOngkir)") }}</a>'
 				},
 				{
 					label: '{{ _("State") }}',
@@ -153,7 +154,54 @@ frappe.ready(() => {
 					});
 
 			}
-		})
+		});
+
+		d.$wrapper.on('click', '.btn-search-city', function(e) {
+			e.preventDefault();
+			const city_dialog = new frappe.ui.Dialog({
+				title: __('Search City (RajaOngkir)'),
+				fields: [
+					{
+						label: __('Search'),
+						fieldname: 'search_term',
+						fieldtype: 'Data',
+						on_change: () => {
+							const term = city_dialog.get_value('search_term').toLowerCase();
+							if (term.length < 3) return;
+							
+							frappe.call({
+								method: 'erpnext_indonesia_localization.api.shipping.sync_cities',
+								callback: function(r) {
+									if (r.message) {
+										const filtered = r.message.filter(c => c.city_name.toLowerCase().includes(term));
+										let html = filtered.map(c => `
+											<div class="p-2 border-bottom select-city" style="cursor:pointer;" data-id="${c.city_id}" data-name="${c.city_name}" data-province="${c.province}">
+												${c.city_name} (${c.province})
+											</div>
+										`).join('');
+										city_dialog.get_field('results_html').$wrapper.html(html);
+									}
+								}
+							});
+						}
+					},
+					{
+						fieldtype: 'HTML',
+						fieldname: 'results_html'
+					}
+				]
+			});
+
+			city_dialog.$wrapper.on('click', '.select-city', function() {
+				const name = $(this).data('name');
+				const id = $(this).data('id');
+				d.set_value('city', name);
+				// We might want to store city_id in a hidden field or similar if the DocType supports it
+				city_dialog.hide();
+			});
+
+			city_dialog.show();
+		});
 
 		d.show();
 	});
