@@ -7,7 +7,7 @@ API endpoints for cart abandonment and recovery.
 
 import frappe
 from frappe import _
-from frappe.utils import nowdatetime
+from frappe.utils import now_datetime
 
 
 @frappe.whitelist(allow_guest=True)

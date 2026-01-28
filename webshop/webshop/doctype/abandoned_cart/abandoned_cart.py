@@ -4,7 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import nowdatetime, add_days, get_url
+from frappe.utils import now_datetime, add_days, get_url
 import secrets
 
 
@@ -89,12 +89,12 @@ class AbandonedCart(Document):
 			# Default expiry: 30 days from abandonment
 			settings = frappe.get_cached_doc("Webshop Settings")
 			expiry_days = getattr(settings, "cart_expiry_days", 30) or 30
-			self.expires_at = add_days(self.abandoned_at or nowdatetime(), expiry_days)
+			self.expires_at = add_days(self.abandoned_at or now_datetime(), expiry_days)
 	
 	def mark_as_recovered(self, sales_order=None, source="Direct"):
 		"""Mark cart as recovered."""
 		self.status = "Recovered"
-		self.recovered_at = nowdatetime()
+		self.recovered_at = now_datetime()
 		self.recovery_source = source
 		
 		if sales_order:
@@ -110,7 +110,7 @@ class AbandonedCart(Document):
 	def increment_notification_count(self):
 		"""Increment notification count after sending notification."""
 		self.notification_count = (self.notification_count or 0) + 1
-		self.last_notification_at = nowdatetime()
+		self.last_notification_at = now_datetime()
 		
 		if self.status == "Abandoned":
 			self.status = "Notified"
@@ -131,7 +131,7 @@ class AbandonedCart(Document):
 		# Check interval
 		if self.last_notification_at:
 			from frappe.utils import time_diff_in_hours
-			hours_since_last = time_diff_in_hours(nowdatetime(), self.last_notification_at)
+			hours_since_last = time_diff_in_hours(now_datetime(), self.last_notification_at)
 			if hours_since_last < notification_interval:
 				return False
 		

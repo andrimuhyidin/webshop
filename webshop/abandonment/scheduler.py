@@ -6,7 +6,7 @@ Scheduler functions for cart abandonment tracking.
 """
 
 import frappe
-from frappe.utils import nowdatetime, add_hours
+from frappe.utils import now_datetime, add_hours
 from webshop.abandonment.notifications import send_abandonment_email
 
 
@@ -24,7 +24,7 @@ def detect_abandoned_carts():
 		return
 	
 	threshold_hours = getattr(settings, "abandonment_threshold_hours", 24) or 24
-	threshold_time = add_hours(nowdatetime(), -threshold_hours)
+	threshold_time = add_hours(now_datetime(), -threshold_hours)
 	
 	# Find abandoned carts (draft quotations not modified within threshold)
 	abandoned_quotations = frappe.db.sql("""
@@ -113,7 +113,7 @@ def cleanup_expired_carts():
 	"""
 	Daily job to cleanup expired abandoned carts.
 	"""
-	now = nowdatetime()
+	now = now_datetime()
 	
 	# Find expired carts
 	expired_carts = frappe.get_all(
@@ -158,7 +158,7 @@ def sync_cart_status():
 		try:
 			cart_doc = frappe.get_doc("Abandoned Cart", cart.name)
 			cart_doc.status = "Converted"
-			cart_doc.recovered_at = nowdatetime()
+			cart_doc.recovered_at = now_datetime()
 			cart_doc.recovery_source = "Direct"
 			cart_doc.save(ignore_permissions=True)
 		except Exception as e:

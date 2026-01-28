@@ -7,7 +7,7 @@ Cart activity tracking functions.
 
 import frappe
 from frappe import _
-from frappe.utils import nowdatetime
+from frappe.utils import now_datetime
 
 
 def track_cart_activity(doc, method=None):
@@ -41,7 +41,7 @@ def track_cart_activity(doc, method=None):
 			"Abandoned Cart",
 			abandoned_cart,
 			"last_activity_at",
-			nowdatetime(),
+			now_datetime(),
 			update_modified=False
 		)
 
@@ -112,7 +112,7 @@ def get_abandonment_stats(days: int = 30) -> dict:
 	"""
 	from frappe.utils import add_days
 	
-	start_date = add_days(nowdatetime(), -days)
+	start_date = add_days(now_datetime(), -days)
 	
 	# Total abandoned carts
 	total_abandoned = frappe.db.count(
