@@ -10,6 +10,9 @@ app_version = _version
 
 required_apps = ["payments", "erpnext"]
 
+# Optional dependencies (checked at runtime)
+optional_apps = ["frappe_whatsapp", "erpnext_indonesia_localization"]
+
 # Desktop icon
 add_to_apps_screen = [
 	{
